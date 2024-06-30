@@ -1,0 +1,69 @@
+module:
+  _target_: src.modules.models.baseline.BayesianOptimization
+  logging:
+    on_step: false
+    on_epoch: true
+    sync_dist: true
+    prog_bar: true
+  model:
+    model:
+      _target_: botorch.models.SingleTaskGP
+    mll:
+      _target_: gpytorch.mlls.ExactMarginalLogLikelihood
+    fit:
+      _target_: botorch.fit.fit_gpytorch_mll
+    optim:
+      _target_: botorch.optim.optimize_acqf
+    acqf:
+      _target_: botorch.acquisition.monte_carlo.qUpperConfidenceBound
+      beta: 3
+    objective:
+      _target_: src.modules.metrics.FaceNetSimilarity
+      facenet:
+        _target_: src.modules.metrics.models.FaceNetModel
+  sampler:
+    _target_: src.modules.components.stylegan_sampler.SGSampler
+    model:
+      _target_: src.modules.components.ganspace.models.StyleGAN
+      class_name: ffhq
+      device: cpu
+    device: cpu
+    output_class: ffhq
+    layers: g_mapping.dense7
+    components: 31
+    use_w: true
+    batch_size: 5000
+    components_dir: /home/tcalo3/projects/project6/src/modules/components/ganspace/cache/components/stylegan-ffhq_g_mapping.dense7_ipca_c32_n300000_w.npz
+    truncation: 0.7
+module/params/total: 27910327
+module/params/trainable: 27910327
+module/params/non_trainable: 0
+datamodule:
+  _target_: src.datamodules.baseline.BaselineDataModule
+  num_iterations: 1000
+trainer:
+  _target_: pytorch_lightning.Trainer
+  default_root_dir: /home/tcalo3/projects/project6/outputs/2024-05-05/22-48-16
+  min_epochs: 1
+  max_epochs: 100
+  accelerator: cpu
+  devices: 1
+  deterministic: false
+callbacks:
+  early_stopping:
+    _target_: pytorch_lightning.callbacks.EarlyStopping
+    monitor: FaceNetSimilarity/train
+    min_delta: 5.0e-05
+    patience: 25
+    verbose: false
+    mode: max
+    strict: true
+    check_finite: true
+    stopping_threshold: null
+    divergence_threshold: null
+    check_on_train_epoch_end: null
+extras: null
+task_name: null
+tags: null
+ckpt_path: null
+seed: 42

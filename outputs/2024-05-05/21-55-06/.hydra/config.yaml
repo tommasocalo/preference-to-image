@@ -1,0 +1,76 @@
+device: cpu
+seed: 42
+steps: 1000
+name: baseline
+module:
+  _target_: src.modules.models.baseline.BayesianOptimization
+  logging:
+    on_step: false
+    on_epoch: true
+    sync_dist: true
+    prog_bar: true
+  model:
+    model:
+      _target_: botorch.models.SingleTaskGP
+    mll:
+      _target_: gpytorch.mlls.ExactMarginalLogLikelihood
+    fit:
+      _target_: botorch.fit.fit_gpytorch_mll
+    optim:
+      _target_: botorch.optim.optimize_acqf
+    acqf:
+      _target_: botorch.acquisition.monte_carlo.qUpperConfidenceBound
+      beta: 3
+    objective:
+      _target_: src.modules.metrics.FaceNetSimilarity
+      facenet:
+        _target_: src.modules.metrics.models.FaceNetModel
+  sampler:
+    _target_: src.modules.components.stylegan_sampler.SGSampler
+    model: ${network.stylegan}
+    device: ${device}
+    output_class: ffhq
+    layers: g_mapping.dense7
+    components: 31
+    use_w: true
+    batch_size: 5000
+    components_dir: ${paths.components_dir}/stylegan-ffhq_g_mapping.dense7_ipca_c32_n300000_w.npz
+    truncation: 0.7
+paths:
+  root_dir: ${oc.env:PROJECT_ROOT}
+  data_dir: ${paths.root_dir}/data/
+  log_dir: ${paths.root_dir}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+  ganspace_dir: ${add_to_sys_path:${paths.root_dir}/src/modules/components/ganspace}
+  components_dir: ${concat_path:${paths.ganspace_dir},cache/components}
+datamodule:
+  _target_: src.datamodules.baseline.BaselineDataModule
+  num_iterations: 1000
+trainer:
+  _target_: pytorch_lightning.Trainer
+  default_root_dir: ${paths.output_dir}
+  min_epochs: 1
+  max_epochs: 100
+  accelerator: cpu
+  devices: 1
+  deterministic: false
+callbacks:
+  early_stopping:
+    _target_: pytorch_lightning.callbacks.EarlyStopping
+    monitor: FaceNetSimilarity/train
+    min_delta: 5.0e-05
+    patience: 25
+    verbose: false
+    mode: max
+    strict: true
+    check_finite: true
+    stopping_threshold: null
+    divergence_threshold: null
+    check_on_train_epoch_end: null
+logger:
+  csv:
+    _target_: pytorch_lightning.loggers.csv_logs.CSVLogger
+    save_dir: ${paths.output_dir}
+    name: csv/
+    prefix: ''

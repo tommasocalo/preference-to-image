@@ -1,0 +1,4 @@
+stylegan:
+  _target_: "src.modules.components.ganspace.models.StyleGAN"
+  class_name: "ffhq"
+  device: ${device}

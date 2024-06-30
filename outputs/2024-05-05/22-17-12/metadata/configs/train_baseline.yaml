@@ -1,0 +1,22 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - module: train_baseline
+  - paths: train_baseline
+  - datamodule: baseline
+  - trainer: cpu 
+  - callbacks: baseline
+  - logger : wandb
+
+
+device: 'cpu'
+seed: 42
+
+steps: 1000
+
+name: 'baseline'
+
+train: True

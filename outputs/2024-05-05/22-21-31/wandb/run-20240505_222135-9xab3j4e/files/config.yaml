@@ -1,0 +1,207 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.12.0
+    cli_version: 0.16.3
+    framework: huggingface
+    huggingface_version: 4.40.0
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1714962095.560733
+    t:
+      1:
+      - 1
+      - 9
+      - 11
+      - 41
+      - 49
+      - 50
+      - 55
+      - 71
+      - 105
+      2:
+      - 1
+      - 9
+      - 11
+      - 41
+      - 49
+      - 50
+      - 55
+      - 71
+      - 105
+      3:
+      - 2
+      - 7
+      - 13
+      - 23
+      4: 3.12.0
+      5: 0.16.3
+      6: 4.40.0
+      8:
+      - 5
+      13: linux-x86_64
+    m:
+    - 1: trainer/global_step
+      6:
+      - 3
+module/_target_:
+  desc: null
+  value: src.modules.models.baseline.BayesianOptimization
+module/logging/on_step:
+  desc: null
+  value: false
+module/logging/on_epoch:
+  desc: null
+  value: true
+module/logging/sync_dist:
+  desc: null
+  value: true
+module/logging/prog_bar:
+  desc: null
+  value: true
+module/model/model/_target_:
+  desc: null
+  value: botorch.models.SingleTaskGP
+module/model/mll/_target_:
+  desc: null
+  value: gpytorch.mlls.ExactMarginalLogLikelihood
+module/model/fit/_target_:
+  desc: null
+  value: botorch.fit.fit_gpytorch_mll
+module/model/optim/_target_:
+  desc: null
+  value: botorch.optim.optimize_acqf
+module/model/acqf/_target_:
+  desc: null
+  value: botorch.acquisition.monte_carlo.qUpperConfidenceBound
+module/model/acqf/beta:
+  desc: null
+  value: 3
+module/model/objective/_target_:
+  desc: null
+  value: src.modules.metrics.FaceNetSimilarity
+module/model/objective/facenet/_target_:
+  desc: null
+  value: src.modules.metrics.models.FaceNetModel
+module/sampler/_target_:
+  desc: null
+  value: src.modules.components.stylegan_sampler.SGSampler
+module/sampler/model/_target_:
+  desc: null
+  value: src.modules.components.ganspace.models.StyleGAN
+module/sampler/model/class_name:
+  desc: null
+  value: ffhq
+module/sampler/model/device:
+  desc: null
+  value: cpu
+module/sampler/device:
+  desc: null
+  value: cpu
+module/sampler/output_class:
+  desc: null
+  value: ffhq
+module/sampler/layers:
+  desc: null
+  value: g_mapping.dense7
+module/sampler/components:
+  desc: null
+  value: 31
+module/sampler/use_w:
+  desc: null
+  value: true
+module/sampler/batch_size:
+  desc: null
+  value: 5000
+module/sampler/components_dir:
+  desc: null
+  value: /home/tcalo3/projects/project6/src/modules/components/ganspace/cache/components/stylegan-ffhq_g_mapping.dense7_ipca_c32_n300000_w.npz
+module/sampler/truncation:
+  desc: null
+  value: 0.7
+module/params/total:
+  desc: null
+  value: 27910327
+module/params/trainable:
+  desc: null
+  value: 27910327
+module/params/non_trainable:
+  desc: null
+  value: 0
+datamodule/_target_:
+  desc: null
+  value: src.datamodules.baseline.BaselineDataModule
+datamodule/num_iterations:
+  desc: null
+  value: 1000
+trainer/_target_:
+  desc: null
+  value: pytorch_lightning.Trainer
+trainer/default_root_dir:
+  desc: null
+  value: /home/tcalo3/projects/project6/outputs/2024-05-05/22-21-31
+trainer/min_epochs:
+  desc: null
+  value: 1
+trainer/max_epochs:
+  desc: null
+  value: 100
+trainer/accelerator:
+  desc: null
+  value: cpu
+trainer/devices:
+  desc: null
+  value: 1
+trainer/deterministic:
+  desc: null
+  value: false
+callbacks/early_stopping/_target_:
+  desc: null
+  value: pytorch_lightning.callbacks.EarlyStopping
+callbacks/early_stopping/monitor:
+  desc: null
+  value: FaceNetSimilarity/train
+callbacks/early_stopping/min_delta:
+  desc: null
+  value: 5.0e-05
+callbacks/early_stopping/patience:
+  desc: null
+  value: 25
+callbacks/early_stopping/verbose:
+  desc: null
+  value: false
+callbacks/early_stopping/mode:
+  desc: null
+  value: max
+callbacks/early_stopping/strict:
+  desc: null
+  value: true
+callbacks/early_stopping/check_finite:
+  desc: null
+  value: true
+callbacks/early_stopping/stopping_threshold:
+  desc: null
+  value: null
+callbacks/early_stopping/divergence_threshold:
+  desc: null
+  value: null
+callbacks/early_stopping/check_on_train_epoch_end:
+  desc: null
+  value: null
+extras:
+  desc: null
+  value: null
+task_name:
+  desc: null
+  value: null
+tags:
+  desc: null
+  value: null
+ckpt_path:
+  desc: null
+  value: null
+seed:
+  desc: null
+  value: 42

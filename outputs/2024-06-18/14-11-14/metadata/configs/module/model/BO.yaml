@@ -1,0 +1,21 @@
+defaults:
+  - _self_
+
+model:
+  _target_: "botorch.models.SingleTaskGP"
+
+mll:
+  _target_: "gpytorch.mlls.ExactMarginalLogLikelihood"
+fit:
+  _target_: "botorch.fit.fit_gpytorch_mll"
+optim:
+  _target_: "botorch.optim.optimize_acqf"
+acqf:
+  _target_: "botorch.acquisition.monte_carlo.qUpperConfidenceBound"
+  beta : 3
+  
+objective:
+  _target_: "src.modules.metrics.FaceNetSimilarity"
+  facenet : 
+    _target_: "src.modules.metrics.models.FaceNetModel"
+  

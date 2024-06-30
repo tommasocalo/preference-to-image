@@ -1,0 +1,12 @@
+defaults:
+  - _self_
+_target_: "src.modules.components.stylegan_sampler.SGSampler"
+model: network/stylegan
+device: ${device}
+output_class: "ffhq"
+layers: "g_mapping.dense7"
+components: 31
+use_w: True  # Assuming this should be a boolean, not a string
+batch_size: 5000  # Fixed formatting of the number
+components_dir: ${paths.components_dir}/stylegan-ffhq_g_mapping.dense7_ipca_c32_n300000_w.npz
+truncation: 0.7

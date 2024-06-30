@@ -1,0 +1,12 @@
+_target_: src.modules.models.baseline.BayesianOptimization
+
+defaults:
+  - _self_
+  - model: BO
+  - sampler: pca_sampler
+
+logging:
+  on_step: False
+  on_epoch: True
+  sync_dist: True
+  prog_bar: True

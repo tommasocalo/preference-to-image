@@ -1,0 +1,5 @@
+defaults:
+  - default.yaml
+  
+ganspace_dir: ${add_to_sys_path:${paths.root_dir}/src/modules/components/ganspace}
+components_dir: ${concat_path:${paths.ganspace_dir},cache/components}
